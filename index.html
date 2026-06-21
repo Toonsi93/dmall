@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Générateur Bot Mass DM - BRVZXL</title>
+    <link rel="icon" href="https://i.imgur.com/KJEJEiJ.png" type="image/png">
+    
+    <!-- Tailwind CSS pour le design -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Highlight.js pour la coloration syntaxique du code -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+    <!-- Icônes Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- LE CONTENU HTML RESTE IDENTIQUE -->
+    <div class="max-w-7xl mx-auto space-y-6">
+        
+        <!-- En-tête Principale (Logo, Titre, Lanyard) -->
+        <div class="flex flex-col lg:flex-row justify-between items-center glass-panel p-6 rounded-2xl">
+            
+            <div class="flex items-center space-x-4 mb-6 lg:mb-0">
+                <div class="p-1 bg-red-900/30 rounded-xl border border-red-500/30 shadow-[0_0_15px_rgba(220,38,38,0.4)]">
+                    <img src="https://cdn.discordapp.com/emojis/1451205994154692688.png" alt="Logo" class="w-12 h-12 object-contain rounded-lg">
+                </div>
+                <div>
+                    <h1 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-500 to-red-900">Générateur de DMALL BRVZXL</h1>
+                    <p class="text-red-400/70 text-sm tracking-wider uppercase font-semibold">Interface de contrôle Autonome</p>
+                </div>
+            </div>
+
+            <div class="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
+                <!-- Profil Lanyard -->
+                <div class="flex items-center space-x-3 bg-black/80 border border-red-900/60 p-2 pl-3 pr-6 rounded-full shadow-[0_0_10px_rgba(220,38,38,0.2)]">
+                    <div class="relative">
+                        <img id="lanyard-avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Créateur" class="w-10 h-10 rounded-full border border-red-500/50">
+                        <div id="lanyard-status" class="absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-black bg-gray-500"></div>
+                    </div>
+                    <div class="text-sm">
+                        <p class="text-red-400/80 text-[10px] uppercase font-bold tracking-widest mb-0.5">Créé par</p>
+                        <p id="lanyard-username" class="font-bold text-white leading-none">Chargement...</p>
+                    </div>
+                </div>
+                
+                <!-- Boutons d'action -->
+                <div class="flex space-x-3 w-full md:w-auto">
+                    <button onclick="copyCode()" class="flex-1 md:flex-none flex items-center justify-center space-x-2 bg-black/60 hover:bg-red-950/40 text-white px-5 py-2.5 rounded-xl transition-all border border-red-900/50 hover:border-red-500">
+                        <i data-lucide="copy" class="w-4 h-4 text-red-400" id="copy-icon"></i>
+                        <span id="copy-text">Copier</span>
+                    </button>
+                    <button onclick="downloadCode()" class="flex-1 md:flex-none flex items-center justify-center space-x-2 bg-red-600 hover:bg-red-500 text-white px-5 py-2.5 rounded-xl transition-all shadow-[0_0_15px_rgba(220,38,38,0.3)] hover:shadow-[0_0_25px_rgba(220,38,38,0.5)]">
+                        <i data-lucide="download" class="w-4 h-4"></i>
+                        <span>Télécharger .py</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- Colonne Gauche : Formulaire -->
+            <div class="space-y-6">
+                
+                <!-- Identifiants -->
+                <div class="glass-panel rounded-2xl p-6">
+                    <h2 class="text-lg font-bold text-red-100 flex items-center mb-5 border-b border-red-900/30 pb-3">
+                        <img src="https://cdn.discordapp.com/emojis/1474172591999553676.gif" alt="Logo" class="w-12 h-12 object-contain rounded-lg"></i> Configuration API
+                    </h2>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm font-semibold text-red-300/80 mb-1">Token du Bot</label>
+                            <input type="password" id="input-token" class="w-full glass-input rounded-xl px-4 py-3 text-gray-200 outline-none" value="">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-semibold text-red-300/80 mb-1">ID du Serveur Cible</label>
+                            <input type="text" id="input-guild" class="w-full glass-input rounded-xl px-4 py-3 text-gray-200 outline-none" value="">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Embed Message -->
+                <div class="glass-panel rounded-2xl p-6">
+                    <h2 class="text-lg font-bold text-red-100 flex items-center mb-5 border-b border-red-900/30 pb-3">
+                        <img src="https://cdn.discordapp.com/emojis/1328640037641916436.png" alt="Logo" class="w-12 h-12 object-contain rounded-lg"></i> Conception du Message
+                    </h2>
+                    <div class="space-y-4">
+                        <div class="flex space-x-4">
+                            <div class="flex-1">
+                                <label class="block text-sm font-semibold text-red-300/80 mb-1">Titre</label>
+                                <input type="text" id="input-title" class="w-full glass-input rounded-xl px-4 py-3 text-gray-200 outline-none" value="BRVZXL BOT">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-red-300/80 mb-1">Couleur</label>
+                                <input type="color" id="input-color" class="h-[52px] w-14 rounded-xl cursor-pointer glass-input p-1" value="#ff0000">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-red-300/80 mb-1">Description</label>
+                            <textarea id="input-desc" rows="10" class="w-full glass-input rounded-xl px-4 py-3 text-gray-200 outline-none font-mono text-sm resize-y"># BRVZXL TITRE
+Voici ton nouveau message personnalisé.
+
+**Rejoins le serveur pour plus de contenu !**
+• Systèmes exclusifs
+• Custom scripts
+• Communauté active
+
+*Réécris cette description comme tu le souhaites.*</textarea>
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-red-300/80 mb-1">Image Principale (URL)</label>
+                            <input type="text" id="input-image" class="w-full glass-input rounded-xl px-4 py-3 text-gray-200 outline-none text-sm" value="https://images-ext-1.discordapp.net/external/BS8ns_XcXQa6Sngb8eFqte8LxbMkeKv8VgO3XmUh_0Y/https/i.imgur.com/lIJvH6C.gif?width=300&height=300">
+                        </div>
+
+                        <div>
+                            <label class="block text-sm font-semibold text-red-300/80 mb-1">Miniature (Thumbnail URL)</label>
+                            <input type="text" id="input-thumbnail" class="w-full glass-input rounded-xl px-4 py-3 text-gray-200 outline-none text-sm" value="https://cdn.discordapp.com/avatars/742341212253585428/d4f8a8b0c4a1d94097377804d2d5b862.png?size=128">
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-semibold text-red-300/80 mb-1">Texte Footer</label>
+                                <input type="text" id="input-footer-text" class="w-full glass-input rounded-xl px-4 py-3 text-gray-200 outline-none text-sm" value="BRVZXL BOT">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-semibold text-red-300/80 mb-1">Icône Footer (URL)</label>
+                                <input type="text" id="input-footer-icon" class="w-full glass-input rounded-xl px-4 py-3 text-gray-200 outline-none text-sm" value="https://cdn.discordapp.com/avatars/742341212253585428/d4f8a8b0c4a1d94097377804d2d5b862.png?size=128">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Colonne Droite : Code & Aperçu -->
+            <div class="flex flex-col glass-panel rounded-2xl overflow-hidden h-[calc(100vh-12rem)] min-h-[600px] border border-red-900/50">
+                
+                <!-- Onglets -->
+                <div class="flex border-b border-red-900/50 bg-black/60">
+                    <button onclick="switchTab('preview')" id="tab-preview" class="flex-1 flex items-center justify-center space-x-2 py-4 text-sm font-bold text-red-400 border-b-2 border-red-500 bg-red-900/10 transition-colors">
+                        <i data-lucide="eye" class="w-4 h-4"></i><span>Aperçu Discord</span>
+                    </button>
+                    <button onclick="switchTab('code')" id="tab-code" class="flex-1 flex items-center justify-center space-x-2 py-4 text-sm font-bold text-gray-400 hover:text-red-300 hover:bg-red-900/20 transition-colors">
+                        <i data-lucide="code" class="w-4 h-4"></i><span>Code Python</span>
+                    </button>
+                    <button onclick="switchTab('run')" id="tab-run" class="flex-1 flex items-center justify-center space-x-2 py-4 text-sm font-bold text-emerald-500 hover:text-emerald-400 hover:bg-emerald-900/20 transition-colors">
+                        <i data-lucide="play" class="w-4 h-4"></i><span>Exécuter</span>
+                    </button>
+                </div>
+
+                <div class="flex-1 overflow-hidden relative">
+                    
+                    <!-- VUE APERÇU -->
+                    <div id="view-preview" class="absolute inset-0 overflow-y-auto bg-[#0d0000] p-6 discord-scroll">
+                        <div class="flex space-x-4">
+                            <div class="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center flex-shrink-0 mt-1 shadow-lg shadow-red-500/20">
+                                <img src="https://cdn.discordapp.com/emojis/1451205994154692688.png" alt="Bot" class="w-6 h-6 object-contain">
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-baseline space-x-2">
+                                    <span class="font-medium text-white text-base">BRVZXL BOT</span>
+                                    <span class="bg-[#5865F2] text-white text-[10px] px-1.5 py-0.5 rounded uppercase font-bold">Bot</span>
+                                    <span class="text-xs text-gray-400" id="current-time"></span>
+                                </div>
+                                
+                                <div class="mt-1 flex">
+                                    <div id="preview-color-bar" class="w-1 rounded-l" style="background-color: #ff0000"></div>
+                                    <div class="bg-[#360101] border border-[#1e1f22] rounded-r p-4 max-w-xl w-full">
+                                        <div class="flex justify-between items-start">
+                                            <div class="flex-1">
+                                                <div id="preview-title" class="text-white font-bold mb-2 break-words">BRVZXL BOT</div>
+                                                <div id="preview-desc" class="text-gray-300 text-sm whitespace-pre-wrap break-words discord-markup"></div>
+                                            </div>
+                                            <div class="ml-4 flex-shrink-0 hidden" id="preview-thumbnail-container">
+                                                <img id="preview-thumbnail" src="" class="w-16 h-16 rounded object-cover">
+                                            </div>
+                                        </div>
+
+                                        <div id="preview-image-container" class="mt-4 rounded overflow-hidden max-w-sm hidden">
+                                            <img id="preview-image" src="" class="w-full h-auto object-cover">
+                                        </div>
+
+                                        <div id="preview-footer-container" class="mt-4 flex items-center space-x-2 text-xs text-gray-400 hidden">
+                                            <img id="preview-footer-icon" src="" class="w-5 h-5 rounded-full object-cover hidden">
+                                            <span id="preview-footer-text"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- VUE CODE -->
+                    <div id="view-code" class="absolute inset-0 overflow-y-auto bg-black/80 hidden discord-scroll">
+                        <pre><code id="code-block" class="language-python text-sm bg-transparent!"></code></pre>
+                    </div>
+
+                    <!-- VUE EXECUTION (RUN) -->
+                    <div id="view-run" class="absolute inset-0 overflow-y-auto bg-black/90 p-6 hidden discord-scroll">
+                        <div class="border border-emerald-500/30 bg-emerald-950/10 p-6 rounded-2xl text-emerald-400 font-mono text-sm shadow-[0_0_20px_rgba(16,185,129,0.15)]">
+                            <p class="mb-6 flex items-center"><i data-lucide="terminal" class="w-4 h-4 mr-2"></i> root@brvzxl-server:~# ./lancer_bot.sh</p>
+                            
+                            <div class="space-y-6 text-gray-300">
+                                <div class="bg-red-950/40 border border-red-900/50 p-4 rounded-xl">
+                                    <p class="text-red-400 font-bold flex items-center mb-2"><i data-lucide="shield-alert" class="w-5 h-5 mr-2"></i> Limite de Navigateur</p>
+                                    <p class="text-red-200/80 text-xs leading-relaxed">Un script Python Discord ne peut pas tourner en arrière-plan d'une simple page web HTML (blocage CORS/Sécurité). Tu dois l'exécuter sur un vrai environnement.</p>
+                                </div>
+                                
+                                <hr class="border-red-900/30">
+                                
+                                <p class="text-white font-bold text-lg">Comment Lancer :</p>
+                                
+                                <div class="bg-black/60 p-5 rounded-xl border border-red-900/50 hover:border-red-500/50 transition-colors">
+                                    <h3 class="text-red-400 font-bold mb-3 flex items-center"><i data-lucide="monitor" class="w-4 h-4 mr-2"></i> Option A : Sur ton PC (Local)</h3>
+                                    <ol class="list-decimal pl-5 space-y-3 text-sm text-gray-400">
+                                        <li>Clique sur <strong class="text-red-300">"Télécharger .py"</strong> en haut de cette page.</li>
+                                        <li>Ouvre un Terminal (CMD ou PowerShell).</li>
+                                        <li>Installe la librairie requise : <code class="bg-red-950/50 text-red-300 px-2 py-0.5 rounded border border-red-900">pip install discord.py</code></li>
+                                        <li>Démarre ton bot : <code class="bg-red-950/50 text-red-300 px-2 py-0.5 rounded border border-red-900">python bot.py</code></li>
+                                    </ol>
+                                </div>
+
+                                <div class="bg-black/60 p-5 rounded-xl border border-red-900/50 hover:border-red-500/50 transition-colors">
+                                    <h3 class="text-indigo-400 font-bold mb-3 flex items-center"><i data-lucide="cloud" class="w-4 h-4 mr-2"></i> Option B : En ligne (Replit)</h3>
+                                    <ol class="list-decimal pl-5 space-y-3 text-sm text-gray-400">
+                                        <li>Copie le code python via le bouton "Copier".</li>
+                                        <li>Va sur <a href="https://replit.com/" target="_blank" class="text-indigo-400 hover:text-indigo-300 underline">Replit.com</a> et crée un projet Python.</li>
+                                        <li>Colle le code dans `main.py`.</li>
+                                        <li>Clique sur <strong class="text-white bg-red-600 px-2 py-1 rounded text-xs">Run ▶</strong></li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- LECTEUR DE MUSIQUE -->
+    <div class="fixed bottom-6 left-6 z-50 glass-panel rounded-2xl flex flex-col overflow-hidden w-80 shadow-2xl border-red-600/40">
+        <div class="p-4 flex items-center space-x-3">
+            <div class="relative w-14 h-14 rounded-xl overflow-hidden shadow-[0_0_15px_rgba(220,38,38,0.5)] flex-shrink-0 bg-black">
+                <img id="music-cover" src="cover.png" alt="Cover" class="w-full h-full object-cover">
+                <div id="playing-animation" class="absolute inset-0 bg-black/50 hidden flex items-center justify-center gap-1">
+                    <div class="w-1.5 h-3 bg-red-500 rounded-full music-bar" style="animation-delay: 0.1s"></div>
+                    <div class="w-1.5 h-5 bg-red-500 rounded-full music-bar" style="animation-delay: 0.3s"></div>
+                    <div class="w-1.5 h-2 bg-red-500 rounded-full music-bar" style="animation-delay: 0.2s"></div>
+                </div>
+            </div>
+            
+            <div class="flex-1 min-w-0 flex flex-col justify-center">
+                <h4 id="music-title" class="text-white font-bold text-sm truncate">Chargement...</h4>
+                <p id="music-artist" class="text-red-400 text-xs truncate mb-1.5">...</p>
+                <div class="flex items-center space-x-2">
+                    <i data-lucide="volume-2" id="volume-icon" class="w-3.5 h-3.5 text-red-400"></i>
+                    <input type="range" id="volume-slider" min="0" max="1" step="0.01" value="1" class="music-slider w-20 h-1.5 cursor-pointer">
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-1 text-white">
+                <button onclick="toggleMusic()" class="p-2 bg-red-600 hover:bg-red-500 rounded-full transition-colors shadow-[0_0_10px_rgba(220,38,38,0.4)]">
+                    <i data-lucide="play" id="music-play-btn" class="w-4 h-4 fill-current"></i>
+                </button>
+                <button onclick="nextMusic()" class="p-2 hover:bg-white/10 rounded-full transition-colors">
+                    <i data-lucide="skip-forward" class="w-4 h-4"></i>
+                </button>
+            </div>
+        </div>
+        
+        <input type="range" id="seek-slider" min="0" max="100" value="0" step="0.1" class="music-slider w-full h-1.5 cursor-pointer rounded-none">
+        <audio id="audio-element" src="music.mp3"></audio>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer-brvzxl">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <img src="https://cdn.discordapp.com/emojis/1451205994154692688.png" alt="BRVZXL" loading="lazy">
+                <div>
+                    <h2>BRVZXL</h2>
+                    <small>✦ DM ALL ✦</small>
+                </div>
+            </div>
+
+            <div class="footer-socials">
+                <a href="https://discord.gg/hPze8JsNhw" class="discord" target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515a.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0a12.64 12.64 0 0 0-.617-1.25a.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057a19.9 19.9 0 0 0 5.993 3.03a.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106a13.107 13.107 0 0 1-1.872-.892a.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.099.245.197.372.291a.077.077 0 0 1-.006.128a13.23 13.23 0 0 1-1.873.892a.077.077 0 0 0-.041.106c.352.699.764 1.364 1.226 1.994a.077.077 0 0 0 .084.028a19.8 19.8 0 0 0 5.993-3.03a.078.078 0 0 0 .031-.057c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.027zM8.02 15.33c-1.183 0-2.157-1.086-2.157-2.419c0-1.333.956-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.332-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.086-2.157-2.419c0-1.333.955-2.419 2.157-2.419c1.21 0 2.176 1.096 2.157 2.42c0 1.332-.946 2.418-2.157 2.418z"/>
+                    </svg>
+                    <span>Discord</span>
+                </a>
+
+                <a href="https://www.tiktok.com/@brvzil_tiktok" class="tiktok" target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16.6 5.82s.51.5 0 0A4.278 4.278 0 0 1 15.54 3h-3.09v12.4a2.592 2.592 0 0 1-2.59 2.5c-1.42 0-2.6-1.16-2.6-2.6c0-1.72 1.66-2.84 3.37-2.22V9.66c-3.45-.46-6.47 2.22-6.47 5.64c0 3.33 2.76 5.7 5.69 5.7c3.14 0 5.69-2.55 5.69-5.7V9.49a7.35 7.35 0 0 0 4.3 1.38V7.6a4.28 4.28 0 0 1-2.92-1.78z"/>
+                    </svg>
+                    <span>TikTok</span>
+                </a>
+
+                <a href="https://www.youtube.com/@BRVZILL" class="youtube" target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                    <span>YouTube</span>
+                </a>
+
+                <a href="https://github.com/Toonsi93" class="github" target="_blank" rel="noopener noreferrer">
+                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.468-2.38 1.235-3.22-.123-.3-.535-1.52.117-3.16 0 0 1.008-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.29-1.552 3.297-1.23 3.297-1.23.653 1.64.24 2.86.118 3.16.768.84 1.233 1.91 1.233 3.22 0 4.61-2.804 5.62-5.476 5.92.43.37.824 1.102.824 2.22 0 1.602-.015 2.894-.015 3.287 0 .322.216.694.825.577C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+                    </svg>
+                    <span>GitHub</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="footer-divider"></div>
+
+        <div class="footer-copy">
+            <span>© 2026 BRVZXL · Tous droits réservés.</span>
+            <span>
+                <a href="#">Mentions légales</a>
+                <a href="#">Politique de confidentialité</a>
+                <a href="#">Contact</a>
+            </span>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
